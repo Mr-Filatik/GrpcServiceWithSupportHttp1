@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+option csharp_namespace = "GrpcServiceWithSupportHttp1";
+
+import "google/api/annotations.proto";
+
+package test;
+
+service Test {
+  rpc SayHelloTest (HelloRequestTest) returns (HelloReplyTest) {
+    option (google.api.http) = {
+      get: "/v1/greeter/{name}"
+    };
+  }
+}
+
+message HelloRequestTest {
+  string name = 1;
+}
+
+message HelloReplyTest {
+  string message = 1;
+}

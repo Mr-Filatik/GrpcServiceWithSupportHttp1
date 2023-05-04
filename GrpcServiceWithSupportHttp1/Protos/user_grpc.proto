@@ -1,0 +1,126 @@
+syntax = "proto3";
+
+option csharp_namespace = "GrpcServiceWithSupportHttp1";
+
+import "google/api/annotations.proto";
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/empty.proto";
+
+package user_grpc;
+
+service UserGrpc {
+  rpc GetCountAll (google.protobuf.Empty) returns (CountResponse) {
+    option (google.api.http) = {
+      get: "/count/users"
+    };
+  }
+  rpc GetCount (PredicateRequest) returns (CountResponse) {
+    option (google.api.http) = {
+      get: "/count/users/{predicate}"
+    };
+  }
+  rpc GetUser (IdRequest) returns (UserResponse) {
+    option (google.api.http) = {
+      get: "/user/{id}"
+    };
+  }
+  rpc GetUsersAll (PageRequest) returns (UserListResponse) {
+    option (google.api.http) = {
+      get: "/users/{page}"
+    };
+  }
+  rpc GetUsers (PredicatePageRequest) returns (UserListResponse) {
+    option (google.api.http) = {
+      get: "/users/{page}/{predicate}"
+    };
+  }
+  rpc CreateUser (UserCreateRequest) returns (UserResponse) {
+    option (google.api.http) = {
+      post: "/user",
+      body: "message"
+    };
+  }
+  rpc DeleteUser (IdRequest) returns (BoolResponse) {
+    option (google.api.http) = {
+      delete: "/user/{id}"
+    };
+  }
+  rpc UpdateUser (UserUpdateRequest) returns (UserResponse) {
+    option (google.api.http) = {
+      put: "/user",
+      body: "message"
+    };
+  }
+}
+
+message BoolResponse {
+    bool value = 1;
+}
+
+message PageRequest {
+    int32 page = 1;
+}
+
+message PredicateRequest {
+    string predicate = 1;
+}
+
+message PredicatePageRequest {
+    string predicate = 1;
+    int32 page = 2;
+}
+
+message IdRequest {
+    int32 id = 1;
+}
+
+message CountResponse {
+    int32 count = 1;
+}
+
+message UserCreateRequest {
+    UserRequest message = 1;
+}
+
+message UserUpdateRequest {
+    UserUpdate message = 1;
+}
+
+message UserUpdate {
+    int32 id = 1;
+    string email = 2;
+    string surname = 3;
+    bool surnameUpdate = 4;
+    string name = 5;
+    bool nameUpdate = 6;
+    string patronymic = 7;
+    bool patronymicUpdate = 8;
+    string password = 9;
+    bool passwordUpdate = 10;
+    google.protobuf.Timestamp birthday = 11;
+    bool birthdayUpdate = 12;
+}
+
+message UserRequest {
+    string surname = 1;
+    string name = 2;
+    string patronymic = 3;
+    string email = 4;
+    string password = 5;
+    google.protobuf.Timestamp birthday = 6;
+}
+
+message UserResponse {
+    int32 id = 1;
+    string surname = 2;
+    string name = 3;
+    string patronymic = 4;
+    string email = 5;
+    google.protobuf.Timestamp birthday = 6;
+}
+
+message UserListResponse {
+    int32 current_page = 1;
+    int32 last_page = 2;
+    repeated UserResponse users = 3;
+}

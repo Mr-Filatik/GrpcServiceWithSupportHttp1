@@ -1,0 +1,67 @@
+syntax = "proto3";
+
+option csharp_namespace = "GrpcServiceWithSupportHttp1";
+
+import "google/api/annotations.proto";
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/empty.proto";
+
+package auth_grpc;
+
+service AuthGrpc {
+  rpc Login (LoginRequest) returns (LoginResponse) {
+    option (google.api.http) = {
+      post: "/login",
+      body: "data"
+    };
+  }
+  rpc Register (RegisterRequest) returns (RegisterResponse) {
+    option (google.api.http) = {
+      post: "/register",
+      body: "data"
+    };
+  }
+  rpc Logout (LogoutRequest) returns (LogoutResponse) {
+    option (google.api.http) = {
+      post: "/logout",
+      body: "data"
+    };
+  }
+}
+
+message LoginRequest {
+    LoginData data = 1;
+}
+
+message LoginData {
+    string login = 1;
+    string password = 2;
+}
+
+message LoginResponse {
+    string key = 1;
+}
+
+message RegisterRequest {
+    RegisterData data = 1;
+}
+
+message RegisterData {
+
+}
+
+message RegisterResponse {
+    string login = 1;
+}
+
+message LogoutRequest {
+    LogoutData data = 1;
+}
+
+message LogoutData {
+    string key = 1;
+}
+
+message LogoutResponse {
+    bool value = 1;
+}
