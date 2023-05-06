@@ -1,0 +1,54 @@
+syntax = "proto3";
+
+option csharp_namespace = "GrpcServiceWithSupportHttp1";
+
+import "google/api/annotations.proto";
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/empty.proto";
+
+import "Protos/entities_grpc.proto";
+
+package attempt_grpc;
+
+service AttemptGrpc {
+  rpc LoadAttempt (LoadAttemptRequest) returns (LoadAttemptResponse) {
+    option (google.api.http) = {
+      get: "/attempt/{code}"
+    };
+  }
+  rpc LoadAllSymptomMeaning (LoadAllSymptomMeaningRequest) returns (LoadAllSymptomMeaningResponse) {
+    option (google.api.http) = {
+      get: "/symptom"
+    };
+  }
+  rpc LoadSymptomMeaning (LoadSymptomMeaningRequest) returns (LoadSymptomMeaningResponse) {
+    option (google.api.http) = {
+      get: "/symptom/{id}"
+    };
+  }
+}
+
+message LoadAttemptRequest {
+    string code = 1;
+}
+
+message LoadAttemptResponse {
+    entities_grpc.AttemptEntityGrpc attempt = 1;
+}
+
+message LoadSymptomMeaningRequest {
+    int32 id = 1;
+}
+
+message LoadAllSymptomMeaningRequest {
+    
+}
+
+message LoadSymptomMeaningResponse {
+    entities_grpc.SymptomEntityGrpc symptom = 1;
+    repeated entities_grpc.SymptomMeaningEntityGrpc symptomMeaning = 2;
+}
+
+message LoadAllSymptomMeaningResponse {
+    repeated LoadSymptomMeaningResponse symptom = 1;
+}

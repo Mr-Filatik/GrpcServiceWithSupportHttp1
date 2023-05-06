@@ -30,5 +30,37 @@ namespace GrpcServiceWithSupportHttp1.Database.Entities
         public DateTime? StartDateTime { get; set; }
         public DateTime? EndDateTime { get; set; }
         public int ErrorCount { get; set; }
+
+        public ICollection<MedicalActionDiagnosis> MedicalActionDiagnoses { get; set; } = new List<MedicalActionDiagnosis>();
+
+        #region Conversion Operations
+
+        public static implicit operator AttemptEntityGrpc(Attempt input)
+        {
+            return new AttemptEntityGrpc()
+            {
+                Id = input.ID,
+                Code = input.Code,
+                StartDateTime = ConversionOperations.Convert(input.StartDateTime),
+                EndDateTime = ConversionOperations.Convert(input.EndDateTime),
+                ErrorCount = input.ErrorCount,
+                Mode = input.Mode,
+                User = input.User,
+                Creator = input.Creator,
+                ExpectedDiagnosis = input.ExpectedDiagnosis,
+                SpecifiedDiagnosis = input.SpecifiedDiagnosis,
+                MedicalActionDiagnoses = { ConversionOperations.Convert(input.MedicalActionDiagnoses) }
+            };
+        }
+
+        public static implicit operator Attempt(AttemptEntityGrpc input)
+        {
+            return new Attempt()
+            {
+                
+            };
+        }
+
+        #endregion
     }
 }

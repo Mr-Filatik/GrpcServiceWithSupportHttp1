@@ -28,9 +28,21 @@ namespace GrpcServiceWithSupportHttp1.Database
         {
             List<Role> roles = new List<Role>()
             {
-                new Role() { ID = RoleEnum.Student, Name = RoleEnum.Student.ToString() },
-                new Role() { ID = RoleEnum.Instructor, Name = RoleEnum.Instructor.ToString() },
-                new Role() { ID = RoleEnum.Administrator, Name = RoleEnum.Administrator.ToString() }
+                new Role() 
+                { 
+                    ID = RoleEnum.Student, 
+                    Name = RoleEnum.Student.ToString() 
+                },
+                new Role() 
+                { 
+                    ID = RoleEnum.Instructor, 
+                    Name = RoleEnum.Instructor.ToString() 
+                },
+                new Role() 
+                { 
+                    ID = RoleEnum.Administrator, 
+                    Name = RoleEnum.Administrator.ToString() 
+                }
             };
             modelBuilder.Entity<Role>().HasData(roles);
 
@@ -86,10 +98,14 @@ namespace GrpcServiceWithSupportHttp1.Database
             };
             modelBuilder.Entity<Diagnosis>().HasData(diagnoses);
 
+            modelBuilder.Entity<MedicalActionDiagnosis>().HasOne(x => x.MedicalAction).WithMany(x => x.MedicalActionDiagnoses);
+            modelBuilder.Entity<MedicalActionDiagnosis>().HasOne(x => x.SymptomMeaning).WithMany(x => x.MedicalActionDiagnoses);
+            modelBuilder.Entity<MedicalActionDiagnosis>().HasOne(x => x.Diagnosis).WithMany(x => x.MedicalActionDiagnoses);
             List<MedicalActionDiagnosis> medicalActionDiagnoses = new List<MedicalActionDiagnosis>()
             {
                 new MedicalActionDiagnosis() { DiagnosisID = 2, MedicalActionID = 1, SymptomMeaningID = 1, Order = 1 },
-                new MedicalActionDiagnosis() { DiagnosisID = 2, MedicalActionID = 2, SymptomMeaningID = 3, Order = 2 }
+                new MedicalActionDiagnosis() { DiagnosisID = 2, MedicalActionID = 2, SymptomMeaningID = 3, Order = 2 },
+                new MedicalActionDiagnosis() { DiagnosisID = 2, MedicalActionID = 6, SymptomMeaningID = null, Order = 3 }
             };
             modelBuilder.Entity<MedicalActionDiagnosis>().HasData(medicalActionDiagnoses);
 

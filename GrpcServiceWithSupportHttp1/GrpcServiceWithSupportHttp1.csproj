@@ -9,6 +9,11 @@
   <ItemGroup>
     <Protobuf Include="Protos\*.proto" GrpcServices="Server" />
   </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Protos\attempt_grpc.proto" />
+    <None Remove="Protos\entities_grpc.proto" />
+  </ItemGroup>
 	
   <ItemGroup>
     <PackageReference Include="Grpc.AspNetCore" Version="2.52.0" />
@@ -24,6 +29,12 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+  </ItemGroup>
+	
+  <ItemGroup>
+    <Protobuf Update="Protos\attempt_grpc.proto">
+      <GrpcServices>Server</GrpcServices>
+    </Protobuf>
   </ItemGroup>
 
 </Project>

@@ -25,11 +25,13 @@ namespace GrpcServiceWithSupportHttp1
             string? connection = builder.Configuration.GetConnectionString("DefaultConnection1"); //change delete 1
             builder.Services.AddDbContext<DatabaseContext>(options => options.UseSqlServer(connection));
             builder.Services.AddScoped<IUserService, UserService>();
+            builder.Services.AddScoped<IAttemptService, AttemptService>();
 
             #endregion
 
             builder.Services.AddGrpc().AddJsonTranscoding()
-                .AddServiceOptions<UserGrpcService>(options => options.Interceptors.Add<AuthorizationInterceptor>());
+                .AddServiceOptions<UserGrpcService>(options => options.Interceptors.Add<AuthorizationInterceptor>())
+                .AddServiceOptions<AttemptGrpcService>(options => options.Interceptors.Add<AuthorizationInterceptor>());
 
             #region Swagger
 
@@ -73,6 +75,7 @@ namespace GrpcServiceWithSupportHttp1
             app.MapGrpcService<TestService>();
             app.MapGrpcService<AuthGrpcService>();
             app.MapGrpcService<UserGrpcService>();
+            app.MapGrpcService<AttemptGrpcService>();
 
             app.Run();
 

@@ -52,5 +52,21 @@ namespace GrpcServiceWithSupportHttp1.Database.Entities
 
         public ICollection<Attempt> CreatedAttempts { get; set; } = new List<Attempt>();
         public ICollection<Attempt> AvailableAttempts { get; set; } = new List<Attempt>();
+
+        #region Conversion Operations
+
+        public static implicit operator UserForAttemptEntityGrpc(User? input)
+        {
+            if (input == null) return new UserForAttemptEntityGrpc();
+            return new UserForAttemptEntityGrpc()
+            {
+                Id = input.Id,
+                Surname = input.Surname,
+                Name = input.Name,
+                Patronymic = input.Patronymic
+            };
+        }
+
+        #endregion
     }
 }

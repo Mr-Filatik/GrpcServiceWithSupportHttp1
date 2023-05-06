@@ -18,5 +18,21 @@ namespace GrpcServiceWithSupportHttp1.Database.Entities
         public SymptomMeaning? SymptomMeaning { get; set; }
 
         public int? Order { get; set; }
+
+        #region Conversion Operations
+
+        public static implicit operator MedicalActionDiagnosisEntityGrpc(MedicalActionDiagnosis? input)
+        {
+            if (input == null) return new MedicalActionDiagnosisEntityGrpc();
+            return new MedicalActionDiagnosisEntityGrpc()
+            {
+                Id = input.DiagnosisID,
+                MedicalAction = input.MedicalAction,
+                SymptomMeaning = input.SymptomMeaning,
+                Order = input.Order != null ? input.Order.Value : default,
+            };
+        }
+
+        #endregion
     }
 }

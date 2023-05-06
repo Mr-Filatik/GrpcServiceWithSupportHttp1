@@ -1,0 +1,74 @@
+syntax = "proto3";
+
+option csharp_namespace = "GrpcServiceWithSupportHttp1";
+
+import "google/api/annotations.proto";
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/empty.proto";
+
+package entities_grpc;
+
+message AttemptEntityGrpc {
+    int32 id = 1;
+    UserForAttemptEntityGrpc user = 2;
+    UserForAttemptEntityGrpc creator = 3;
+    DiagnosisEntityGrpc expectedDiagnosis = 4;
+    DiagnosisEntityGrpc specifiedDiagnosis = 5;
+    ModeEntityGrpc mode = 6;
+    string code = 7;
+    google.protobuf.Timestamp startDateTime = 8;
+    google.protobuf.Timestamp endDateTime = 9;
+    int32 errorCount = 10;
+    repeated MedicalActionDiagnosisEntityGrpc medicalActionDiagnoses = 11;
+}
+
+message DiagnosisEntityGrpc {
+    int32 id = 1;
+    string name = 2;
+}
+
+message ModeEntityGrpc {
+    int32 id = 1;
+    string name = 2;
+}
+
+message MedicalActionEntityGrpc {
+    int32 id = 1;
+    SymptomEntityGrpc symptom = 2;
+    string name = 3;
+    string exercise = 4;
+}
+
+message MedicalActionDiagnosisEntityGrpc {
+    int32 id = 1;
+    MedicalActionEntityGrpc medicalAction = 2;
+    SymptomMeaningEntityGrpc symptomMeaning = 3;
+    int32 order = 4;
+}
+
+message SymptomEntityGrpc {
+    int32 id = 1;
+    string name = 2;
+}
+
+message SymptomMeaningEntityGrpc {
+    int32 id = 1;
+    SymptomEntityGrpc symptom = 2;
+    bool isFlag = 3;
+    bool flag = 4;
+    bool isNumber = 5;
+    int32 number = 6;
+    bool isValue = 7;
+    string value = 8;
+    bool isImage = 9;
+    string image = 10;
+    bool isSound = 11;
+    string sound = 12;
+}
+
+message UserForAttemptEntityGrpc {
+    int32 id = 1;
+    string surname = 2;
+    string name = 3;
+    string patronymic = 4;
+}
