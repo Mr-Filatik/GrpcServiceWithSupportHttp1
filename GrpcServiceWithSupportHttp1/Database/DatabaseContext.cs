@@ -20,7 +20,7 @@ namespace GrpcServiceWithSupportHttp1.Database
  
         public DatabaseContext(DbContextOptions<DatabaseContext> optionsBuilder) : base(optionsBuilder)
         {
-            Database.EnsureDeleted();
+            //Database.EnsureDeleted();
             Database.EnsureCreated();
         }
 

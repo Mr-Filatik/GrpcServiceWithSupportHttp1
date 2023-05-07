@@ -16,6 +16,24 @@ service AttemptGrpc {
       get: "/attempt/{code}"
     };
   }
+  rpc StartAttempt (StartAttemptRequest) returns (StartAttemptResponse) {
+    option (google.api.http) = {
+      put: "/start/attempt",
+      body: "message"
+    };
+  }
+  rpc EndAttempt (EndAttemptRequest) returns (EndAttemptResponse) {
+    option (google.api.http) = {
+      put: "/end/attempt",
+      body: "message"
+    };
+  }
+  rpc ResetAttempt (StartAttemptRequest) returns (StartAttemptResponse) {
+    option (google.api.http) = {
+      put: "/reset/attempt",
+      body: "message"
+    };
+  }
   rpc LoadAllSymptomMeaning (LoadAllSymptomMeaningRequest) returns (LoadAllSymptomMeaningResponse) {
     option (google.api.http) = {
       get: "/symptom"
@@ -26,6 +44,24 @@ service AttemptGrpc {
       get: "/symptom/{id}"
     };
   }
+}
+
+message StartAttemptRequest {
+    entities_grpc.StartAttemptEntityGrpc message = 1;
+}
+
+message StartAttemptResponse {
+    google.protobuf.Timestamp time = 1;
+}
+
+message EndAttemptRequest {
+    entities_grpc.EndAttemptEntityGrpc message = 1;
+}
+
+message EndAttemptResponse {
+    google.protobuf.Timestamp time = 1;
+    bool grade = 2;
+    int32 errorCount = 3;
 }
 
 message LoadAttemptRequest {

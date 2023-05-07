@@ -1,4 +1,5 @@
-﻿using GrpcServiceWithSupportHttp1.Database.Entities;
+﻿using Google.Rpc;
+using GrpcServiceWithSupportHttp1.Database.Entities;
 using GrpcServiceWithSupportHttp1.Services;
 using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 using Microsoft.CodeAnalysis.CSharp.Scripting;
@@ -36,7 +37,7 @@ namespace GrpcServiceWithSupportHttp1.Database.Services
                 .Include(o => o.Mode)
                 //.Include(o => o.MedicalActionDiagnoses) //dont work
                     //.ThenInclude(o => o.MedicalAction) //dont work
-                .FirstOrDefault(x => x.Code == code && x.StartDateTime == null && x.EndDateTime == null);
+                .FirstOrDefault(x => x.Code == code/* && x.StartDateTime == null && x.EndDateTime == null*/);
             if (attempt == null) { throw new Exception("Attempt not found"); }
             attempt.MedicalActionDiagnoses = _dbContext.MedicalActionDiagnoses
                 .Include(o => o.MedicalAction)
@@ -66,6 +67,54 @@ namespace GrpcServiceWithSupportHttp1.Database.Services
                 outputs.Add((symptoms[i], symptomMeanings));
             }
             return outputs;
+        }
+
+        public async Task<Attempt> StartAttempt(int id)
+        {
+            Attempt? attempt = _dbContext.Attempts
+                .FirstOrDefault(x => x.ID == id && x.StartDateTime == null && x.EndDateTime == null);
+            if (attempt == null) { throw new Exception("Attempt not found"); }
+            attempt.StartDateTime = DateTime.Now;
+            _dbContext.Attempts.Update(attempt);
+            _dbContext.SaveChanges();
+            attempt = _dbContext.Attempts
+                .FirstOrDefault(x => x.ID == id && x.StartDateTime != null && x.EndDateTime == null);
+            if (attempt == null) { throw new Exception("Attempt update error"); }
+            return attempt;
+        }
+
+        public async Task<Attempt> EndAttempt(int id, int diagnosisId, int errorCount)
+        {
+            Attempt? attempt = _dbContext.Attempts
+                .FirstOrDefault(x => x.ID == id && x.StartDateTime != null && x.EndDateTime == null);
+            if (attempt == null) { throw new Exception("Attempt not found"); }
+            Diagnosis? diagnosis = _dbContext.Diagnoses.FirstOrDefault(x => x.ID == diagnosisId);
+            if (diagnosis == null) { throw new Exception("Diagnosis not found"); }
+            attempt.EndDateTime = DateTime.Now;
+            attempt.SpecifiedDiagnosisID = diagnosis.ID;
+            attempt.SpecifiedDiagnosis = diagnosis;
+            attempt.ErrorCount = errorCount;
+            _dbContext.Attempts.Update(attempt);
+            _dbContext.SaveChanges();
+            attempt = _dbContext.Attempts
+                .FirstOrDefault(x => x.ID == id && x.StartDateTime != null && x.EndDateTime != null);
+            if (attempt == null) { throw new Exception("Attempt update error"); }
+            return attempt;
+        }
+
+        public async Task<Attempt> ResetAttempt(int id)
+        {
+            Attempt? attempt = _dbContext.Attempts
+                .FirstOrDefault(x => x.ID == id);
+            if (attempt == null) { throw new Exception("Attempt not found"); }
+            attempt.StartDateTime = null;
+            attempt.EndDateTime = null;
+            _dbContext.Attempts.Update(attempt);
+            _dbContext.SaveChanges();
+            attempt = _dbContext.Attempts
+                .FirstOrDefault(x => x.ID == id && x.StartDateTime == null && x.EndDateTime == null);
+            if (attempt == null) { throw new Exception("Attempt update error"); }
+            return attempt;
         }
     }
 }

@@ -72,3 +72,13 @@ message UserForAttemptEntityGrpc {
     string name = 3;
     string patronymic = 4;
 }
+
+message StartAttemptEntityGrpc {
+    int32 id = 1;
+}
+
+message EndAttemptEntityGrpc {
+    int32 id = 1;
+    int32 diagnosisId = 2;
+    int32 errorCount = 3;
+}

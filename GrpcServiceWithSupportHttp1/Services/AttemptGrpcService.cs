@@ -1,6 +1,7 @@
 ﻿using Google.Protobuf.Collections;
 using Google.Protobuf.WellKnownTypes;
 using Grpc.Core;
+using GrpcServiceWithSupportHttp1.Database;
 using GrpcServiceWithSupportHttp1.Database.Entities;
 using GrpcServiceWithSupportHttp1.Database.Services;
 using System.Collections.Generic;
@@ -79,6 +80,62 @@ namespace GrpcServiceWithSupportHttp1.Services
                     });
                 }
                 return Task.FromResult(new LoadAllSymptomMeaningResponse() { Symptom = { output } });
+            }
+            catch (Exception e)
+            {
+                throw new RpcException(new Status(StatusCode.Aborted, $"Error on server: {e.Message}"));
+            }
+        }
+
+        public override Task<StartAttemptResponse> StartAttempt(StartAttemptRequest request, ServerCallContext context)
+        {
+            try
+            {
+                _logger.LogInformation($"AttemptGrpcService: StartAttempt {request.Message.Id}");
+                Attempt attempt = _attemptService.StartAttempt(request.Message.Id).Result;
+                StartAttemptResponse response = new StartAttemptResponse()
+                {
+                    Time = ConversionOperations.Convert(attempt.StartDateTime)
+                };
+                return Task.FromResult(response);
+            }
+            catch (Exception e)
+            {
+                throw new RpcException(new Status(StatusCode.Aborted, $"Error on server: {e.Message}"));
+            }
+        }
+
+        public override Task<EndAttemptResponse> EndAttempt(EndAttemptRequest request, ServerCallContext context)
+        {
+            try
+            {
+                _logger.LogInformation($"AttemptGrpcService: EndAttempt {request.Message.Id}");
+                Attempt attempt = _attemptService.EndAttempt(request.Message.Id, request.Message.DiagnosisId, request.Message.ErrorCount).Result;
+                EndAttemptResponse response = new EndAttemptResponse()
+                {
+                    Time = ConversionOperations.Convert(attempt.StartDateTime),
+                    Grade = attempt.ErrorCount == 0,
+                    ErrorCount = attempt.ErrorCount
+                };
+                return Task.FromResult(response);
+            }
+            catch (Exception e)
+            {
+                throw new RpcException(new Status(StatusCode.Aborted, $"Error on server: {e.Message}"));
+            }
+        }
+
+        public override Task<StartAttemptResponse> ResetAttempt(StartAttemptRequest request, ServerCallContext context)
+        {
+            try
+            {
+                _logger.LogInformation($"AttemptGrpcService: ResetAttempt {request.Message.Id}");
+                Attempt attempt = _attemptService.ResetAttempt(request.Message.Id).Result;
+                StartAttemptResponse response = new StartAttemptResponse()
+                {
+                    Time = ConversionOperations.Convert(DateTime.UtcNow)
+                };
+                return Task.FromResult(response);
             }
             catch (Exception e)
             {
