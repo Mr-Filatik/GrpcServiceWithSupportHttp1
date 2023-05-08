@@ -6,6 +6,7 @@ namespace GrpcServiceWithSupportHttp1.Database.Services
     public interface IUserService
     {
         public Task<string> Login(string email, string password);
+        public Task<bool> IsLogin(string accessKey);
         public Task<bool> Logout(string accessKey);
         public Task<int> GetCount(Func<User, bool> predicate = null);
         public Task<User> GetUser(int id);

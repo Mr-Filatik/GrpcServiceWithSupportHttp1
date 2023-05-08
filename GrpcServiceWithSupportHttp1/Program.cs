@@ -22,7 +22,7 @@ namespace GrpcServiceWithSupportHttp1
 
             #region Swagger
 
-            string? connection = builder.Configuration.GetConnectionString("DefaultConnection"); //change delete 1
+            string? connection = builder.Configuration.GetConnectionString("DefaultConnection"); // 1 for HOME
             builder.Services.AddDbContext<DatabaseContext>(options => options.UseSqlServer(connection));
             builder.Services.AddScoped<IUserService, UserService>();
             builder.Services.AddScoped<IAttemptService, AttemptService>();

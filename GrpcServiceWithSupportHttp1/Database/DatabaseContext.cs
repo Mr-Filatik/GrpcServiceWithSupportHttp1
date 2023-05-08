@@ -56,7 +56,7 @@ namespace GrpcServiceWithSupportHttp1.Database
 
             List<User> users = new List<User>() {
                 new User() { Id = 1, Email = "filatov23wlad@gmail.com", PasswordHash = PasswordHash("password"), Surname = "Филатов", Name = "Владислав", Patronymic = "Алексеевич", Birthday = new DateTime(1999, 6, 23), AccessKey = null },
-                new User() { Id = 2, Email = "ermakov.grisha@yandex.ru ", PasswordHash = PasswordHash("password"), Surname = "Ермаков", Name = "Григорий", Patronymic = "Евгеньевич", Birthday = new DateTime(2000, 2, 1), AccessKey = null },
+                new User() { Id = 2, Email = "ermakov.grisha@yandex.ru", PasswordHash = PasswordHash("password"), Surname = "Ермаков", Name = "Григорий", Patronymic = "Евгеньевич", Birthday = new DateTime(2000, 2, 1), AccessKey = null },
                 new User() { Id = 3, Email = "instructor@mail.ru", PasswordHash = PasswordHash("password"), Surname = "Основной", Name = "Инструктор", Patronymic = "Приложения", Birthday = new DateTime(2001, 5, 16), AccessKey = null },
                 new User() { Id = 4, Email = "student@mail.ru", PasswordHash = PasswordHash("password"), Surname = "Основной", Name = "Ученик", Patronymic = "Приложения", Birthday = new DateTime(2002, 7, 28), AccessKey = null },
             };
@@ -122,12 +122,12 @@ namespace GrpcServiceWithSupportHttp1.Database
 
         public string PasswordHash(string passwordString)
         {
-            return Convert.ToBase64String(KeyDerivation.Pbkdf2(
+            return passwordString;/*Convert.ToBase64String(KeyDerivation.Pbkdf2(
                 password: passwordString,
                 salt: RandomNumberGenerator.GetBytes(128 / 8),
                 prf: KeyDerivationPrf.HMACSHA256,
                 iterationCount: 100000,
-                numBytesRequested: 256 / 8));
+                numBytesRequested: 256 / 8));*/
         }
     }
 }

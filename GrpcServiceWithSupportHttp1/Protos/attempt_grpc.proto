@@ -76,9 +76,7 @@ message LoadSymptomMeaningRequest {
     int32 id = 1;
 }
 
-message LoadAllSymptomMeaningRequest {
-    
-}
+message LoadAllSymptomMeaningRequest { }
 
 message LoadSymptomMeaningResponse {
     entities_grpc.SymptomEntityGrpc symptom = 1;

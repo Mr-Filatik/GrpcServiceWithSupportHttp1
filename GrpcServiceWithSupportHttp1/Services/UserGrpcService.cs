@@ -36,7 +36,6 @@ namespace GrpcServiceWithSupportHttp1.Services
             catch (Exception e)
             {
                 throw new RpcException(new Status(StatusCode.Aborted, $"Error on server: {e.Message}"));
-                //throw new RpcException(new Status(StatusCode.Aborted, "Error on server"), $"Error on server: {e.Message}");
             }
         }
 
@@ -57,7 +56,6 @@ namespace GrpcServiceWithSupportHttp1.Services
             catch (Exception e)
             {
                 throw new RpcException(new Status(StatusCode.Aborted, $"Error on server: {e.Message}"));
-                //throw new RpcException(new Status(StatusCode.Aborted, "Error on server"), $"Error on server: {e.Message}");
             }
         }
 
@@ -72,7 +70,6 @@ namespace GrpcServiceWithSupportHttp1.Services
             catch (Exception e)
             {
                 throw new RpcException(new Status(StatusCode.Aborted, $"Error on server: {e.Message}"));
-                //throw new RpcException(new Status(StatusCode.Aborted, "Error on server"), $"Error on server: {e.Message}");
             }
         }
 
@@ -93,7 +90,6 @@ namespace GrpcServiceWithSupportHttp1.Services
             catch (Exception e)
             {
                 throw new RpcException(new Status(StatusCode.Aborted, $"Error on server: {e.Message}"));
-                //throw new RpcException(new Status(StatusCode.Aborted, "Error on server"), $"Error on server: {e.Message}");
             }
         }
 
@@ -116,7 +112,6 @@ namespace GrpcServiceWithSupportHttp1.Services
             catch (Exception e)
             {
                 throw new RpcException(new Status(StatusCode.Aborted, $"Error on server: {e.Message}"));
-                //throw new RpcException(new Status(StatusCode.Aborted, "Error on server"), $"Error on server: {e.Message}");
             }
         }
 
@@ -140,7 +135,6 @@ namespace GrpcServiceWithSupportHttp1.Services
             catch (Exception e)
             {
                 throw new RpcException(new Status(StatusCode.Aborted, $"Error on server: {e.Message}"));
-                //throw new RpcException(new Status(StatusCode.Aborted, "Error on server"), $"Error on server: {e.Message}");
             }
         }
 
@@ -155,7 +149,6 @@ namespace GrpcServiceWithSupportHttp1.Services
             catch (Exception e)
             {
                 throw new RpcException(new Status(StatusCode.Aborted, $"Error on server: {e.Message}"));
-                //throw new RpcException(new Status(StatusCode.Aborted, "Error on server"), $"Error on server: {e.Message}");
             }
         }
 
@@ -184,7 +177,6 @@ namespace GrpcServiceWithSupportHttp1.Services
             catch (Exception e)
             {
                 throw new RpcException(new Status(StatusCode.Aborted, $"Error on server: {e.Message}"));
-                //throw new RpcException(new Status(StatusCode.Aborted, "Error on server"), $"Error on server: {e.Message}");
             }
         }
 

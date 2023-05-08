@@ -24,8 +24,21 @@ namespace GrpcServiceWithSupportHttp1.Services
 
         public override Task<LoginResponse> Login(LoginRequest request, ServerCallContext context)
         {
-            _logger.LogInformation("Login");
-            return base.Login(request, context);
+            try
+            {
+                _logger.LogInformation($"AuthGrpcService: Login ({request.Data.Login})");
+                string pass = request.Data.Password;/*Convert.ToBase64String(KeyDerivation.Pbkdf2(password: request.Data.Password,
+                  salt: RandomNumberGenerator.GetBytes(128 / 8),
+                  prf: KeyDerivationPrf.HMACSHA256,
+                  iterationCount: 100000,
+                  numBytesRequested: 256 / 8));*/
+                string key = _userService.Login(request.Data.Login, pass).Result;
+                return Task.FromResult(new LoginResponse() { Key = key});
+            }
+            catch (Exception e)
+            {
+                throw new RpcException(new Status(StatusCode.Aborted, $"Error on server: {e.Message}"));
+            }
         }
 
         public override Task<RegisterResponse> Register(RegisterRequest request, ServerCallContext context)
@@ -36,8 +49,16 @@ namespace GrpcServiceWithSupportHttp1.Services
 
         public override Task<LogoutResponse> Logout(LogoutRequest request, ServerCallContext context)
         {
-            _logger.LogInformation("Logout");
-            return base.Logout(request, context);
+            try
+            {
+                _logger.LogInformation($"AuthGrpcService: Logout ({request.Data.Key})");
+                bool flag = _userService.Logout(request.Data.Key).Result;
+                return Task.FromResult(new LogoutResponse() { Value = flag });
+            }
+            catch (Exception e)
+            {
+                throw new RpcException(new Status(StatusCode.Aborted, $"Error on server: {e.Message}"));
+            }
         }
 
         //private User ConvertToUser(UserRequest user)

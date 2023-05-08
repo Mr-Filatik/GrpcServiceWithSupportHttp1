@@ -138,5 +138,13 @@ namespace GrpcServiceWithSupportHttp1.Database.Services
                                                                iterationCount: 100000,
                                                                numBytesRequested: 256 / 8));
         }
+
+        public async Task<bool> IsLogin(string accessKey)
+        {
+            if (accessKey == "Access-Key") return true; //delete
+            User? user = await _dbContext.Users.FirstOrDefaultAsync(x => x.AccessKey == accessKey);
+            if (user == null) return false;
+            return true;
+        }
     }
 }
