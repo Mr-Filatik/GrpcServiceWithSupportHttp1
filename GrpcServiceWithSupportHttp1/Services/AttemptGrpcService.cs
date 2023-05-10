@@ -4,6 +4,8 @@ using Grpc.Core;
 using GrpcServiceWithSupportHttp1.Database;
 using GrpcServiceWithSupportHttp1.Database.Entities;
 using GrpcServiceWithSupportHttp1.Database.Services;
+using Microsoft.CodeAnalysis.CSharp.Scripting;
+using Microsoft.CodeAnalysis.Scripting;
 using System.Collections.Generic;
 
 namespace GrpcServiceWithSupportHttp1.Services
@@ -133,7 +135,7 @@ namespace GrpcServiceWithSupportHttp1.Services
                 Attempt attempt = _attemptService.ResetAttempt(request.Message.Id).Result;
                 StartAttemptResponse response = new StartAttemptResponse()
                 {
-                    Time = ConversionOperations.Convert(DateTime.UtcNow)
+                    Time = ConversionOperations.Convert(DateTime.Now.AddHours(4))
                 };
                 return Task.FromResult(response);
             }
@@ -141,6 +143,36 @@ namespace GrpcServiceWithSupportHttp1.Services
             {
                 throw new RpcException(new Status(StatusCode.Aborted, $"Error on server: {e.Message}"));
             }
+        }
+
+        public override Task<GetDiagnosesResponse> GetDiagnoses(GetDiagnosesRequest request, ServerCallContext context)
+        {
+            try
+            {
+                _logger.LogInformation($"UserGrpcService: GetDiagnoses ({request.Page})");
+                (List<Diagnosis> diagnoses, int currPage, int lastPage) result = _attemptService.GetDiagnoses(request.Page).Result;
+                GetDiagnosesResponse response = new GetDiagnosesResponse
+                {
+                    Users = { ConvertFromDiagnoses(result.diagnoses) },
+                    CurrentPage = result.currPage,
+                    LastPage = result.lastPage
+                };
+                return Task.FromResult(response);
+            }
+            catch (Exception e)
+            {
+                throw new RpcException(new Status(StatusCode.Aborted, $"Error on server: {e.Message}"));
+            }
+        }
+
+        private List<DiagnosisEntityGrpc> ConvertFromDiagnoses(List<Diagnosis> list)
+        {
+            List<DiagnosisEntityGrpc> response = new();
+            foreach (Diagnosis item in list)
+            {
+                response.Add(item);
+            }
+            return response;
         }
     }
 }

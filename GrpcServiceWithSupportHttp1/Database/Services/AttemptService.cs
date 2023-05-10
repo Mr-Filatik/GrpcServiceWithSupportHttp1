@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 using Microsoft.CodeAnalysis.CSharp.Scripting;
 using Microsoft.CodeAnalysis.Scripting;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
@@ -74,7 +75,7 @@ namespace GrpcServiceWithSupportHttp1.Database.Services
             Attempt? attempt = _dbContext.Attempts
                 .FirstOrDefault(x => x.ID == id && x.StartDateTime == null && x.EndDateTime == null);
             if (attempt == null) { throw new Exception("Attempt not found"); }
-            attempt.StartDateTime = DateTime.Now;
+            attempt.StartDateTime = DateTime.Now.AddHours(4);
             _dbContext.Attempts.Update(attempt);
             _dbContext.SaveChanges();
             attempt = _dbContext.Attempts
@@ -115,6 +116,18 @@ namespace GrpcServiceWithSupportHttp1.Database.Services
                 .FirstOrDefault(x => x.ID == id && x.StartDateTime == null && x.EndDateTime == null);
             if (attempt == null) { throw new Exception("Attempt update error"); }
             return attempt;
+        }
+
+        public async Task<(List<Diagnosis>diagnoses, int currPage, int lastPage)> GetDiagnoses(int page)
+        {
+            int count = _dbContext.Diagnoses.Count();
+            if (page < 1) page = 1;
+            int lastPage = (count % _selectCount) == 0 ? (count / _selectCount) : ((count / _selectCount) + 1);
+            if (page > lastPage) page = lastPage;
+
+            List<Diagnosis> diagnosisList = _dbContext.Diagnoses.Skip((page - 1) * _selectCount).Take(_selectCount).ToList();
+            if (!diagnosisList.Any()) throw new Exception("Diagnoses not found");
+            return (diagnosisList, page, lastPage);
         }
     }
 }

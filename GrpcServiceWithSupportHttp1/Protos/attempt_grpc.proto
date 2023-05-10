@@ -44,6 +44,21 @@ service AttemptGrpc {
       get: "/symptom/{id}"
     };
   }
+  rpc GetDiagnoses (GetDiagnosesRequest) returns (GetDiagnosesResponse) {
+    option (google.api.http) = {
+      get: "/diagnoses/{page}"
+    };
+  }
+}
+
+message GetDiagnosesRequest {
+    int32 page = 1;
+}
+
+message GetDiagnosesResponse {
+    int32 current_page = 1;
+    int32 last_page = 2;
+    repeated entities_grpc.DiagnosisEntityGrpc users = 3;
 }
 
 message StartAttemptRequest {
@@ -76,7 +91,9 @@ message LoadSymptomMeaningRequest {
     int32 id = 1;
 }
 
-message LoadAllSymptomMeaningRequest { }
+message LoadAllSymptomMeaningRequest { 
+
+}
 
 message LoadSymptomMeaningResponse {
     entities_grpc.SymptomEntityGrpc symptom = 1;

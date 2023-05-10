@@ -11,5 +11,6 @@ namespace GrpcServiceWithSupportHttp1.Database.Services
         public Task<Attempt> StartAttempt(int id);
         public Task<Attempt> EndAttempt(int id, int diagnosisId, int errorCount);
         public Task<Attempt> ResetAttempt(int id);
+        public Task<(List<Diagnosis> diagnoses, int currPage, int lastPage)> GetDiagnoses(int page);
     }
 }
